@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Locale;
 
 
-public class PetTypeFormatter implements Formatter {
+public class PetTypeFormatter implements Formatter<PetType> {
 
     private final PetTypeService petTypeService;
 
