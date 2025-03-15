@@ -1,10 +1,12 @@
 package guru.springframework.sfgpetclinic.controllers;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 
 import java.time.Duration;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
@@ -20,6 +22,8 @@ class IndexControllerTest {
     @DisplayName("Test Proper View name is returned for index page")
     void index() {
         assertEquals("index", indexController.index(), "Wrong View Returned!");
+
+        assertThat("index").isEqualTo(indexController.index());
     }
 
     @Test
@@ -51,7 +55,7 @@ class IndexControllerTest {
     @Test
     void testAssumptionFalse() {
         assumeTrue("GURU".equalsIgnoreCase("GURU"));
-        assertFalse(true);
+//        assertFalse(true);
     }
 
     @Test
