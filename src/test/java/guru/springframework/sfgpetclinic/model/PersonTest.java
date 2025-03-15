@@ -1,6 +1,8 @@
 package guru.springframework.sfgpetclinic.model;
 
 import guru.springframework.sfgpetclinic.ModelTests;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -19,5 +21,10 @@ class PersonTest implements ModelTests {
                 () -> assertEquals("Joe", person.getFirstName(), "First Name Failed!"),
                 () -> assertEquals("Black", person.getLastName(), "Last Name Failed!")
         );
+    }
+
+    @DisplayName("My Repeated Test")
+    @RepeatedTest(value = 10, name = "{displayName}:{currentRepetition}/{totalRepetitions}")
+    void myRepeatedTest() {
     }
 }
