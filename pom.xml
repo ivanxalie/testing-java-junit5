@@ -94,7 +94,7 @@
                     <argLine>
                         --illegal-access=permit
                     </argLine>
-                    <excludedGroups>controllers</excludedGroups>
+<!--                    <excludedGroups>controllers</excludedGroups>-->
                 </configuration>
             </plugin>
             <plugin>
