@@ -7,7 +7,9 @@ import guru.springframework.sfgpetclinic.services.PetTypeService;
 import java.util.HashSet;
 import java.util.Set;
 
-
+/**
+ * Original source - https://junit.org/junit5/docs/current/user-guide/#extensions-lifecycle-callbacks-timing-extension
+ */
 public class PetTypeSDJpaService implements PetTypeService {
 
     private final PetTypeRepository petTypeRepository;
