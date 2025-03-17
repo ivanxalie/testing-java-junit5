@@ -92,5 +92,6 @@ class SpecialitySDJpaServiceTest {
 
         assertThat(found).isNotNull().isEqualTo(speciality);
         then(specialtyRepository).should().findById(1L);
+        then(specialtyRepository).shouldHaveNoMoreInteractions();
     }
 }
