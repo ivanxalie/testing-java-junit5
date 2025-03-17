@@ -8,14 +8,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class SpecialitySDJpaServiceTest {
 
     @Mock
@@ -129,5 +133,47 @@ class SpecialitySDJpaServiceTest {
 
         // then
         then(specialtyRepository).should().findById(1L);
+    }
+
+    @Test
+    void testSaveLambda() {
+        // given
+        String match = "MATCH_ME";
+        Speciality speciality = new Speciality();
+        speciality.setDescription(match);
+
+        Speciality saved = new Speciality();
+        saved.setId(1L);
+
+        given(specialtyRepository.save(argThat(argument -> argument.getDescription().equals(match))))
+                .willReturn(saved);
+
+        // when
+        Speciality returned = service.save(speciality);
+
+        // then
+        assertThat(returned.getId()).isEqualTo(1L);
+        then(specialtyRepository).should().save(any(Speciality.class));
+    }
+
+    @Test
+    void testSaveLambdaNoMatch() {
+        // given
+        String match = "MATCH_ME";
+        Speciality speciality = new Speciality();
+        speciality.setDescription("Not a chance!");
+
+        Speciality saved = new Speciality();
+        saved.setId(1L);
+
+        given(specialtyRepository.save(argThat(argument -> argument.getDescription().equals(match))))
+                .willReturn(saved);
+
+        // when
+        Speciality returned = service.save(speciality);
+
+        // then
+        assertNull(returned);
+        then(specialtyRepository).should().save(any(Speciality.class));
     }
 }
