@@ -3,6 +3,7 @@ package guru.springframework.sfgpetclinic.services.springdatajpa;
 import guru.springframework.sfgpetclinic.model.Visit;
 import guru.springframework.sfgpetclinic.repositories.VisitRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,6 +34,7 @@ class VisitSDJpaServiceTest {
         visit = new Visit();
     }
 
+    @DisplayName("Test Find All")
     @Test
     void findAll() {
         Set<Visit> visits = Set.of(visit);
@@ -44,6 +46,7 @@ class VisitSDJpaServiceTest {
         verify(visitRepository).findAll();
     }
 
+    @DisplayName("Test Find by Id")
     @Test
     void findById() {
         when(visitRepository.findById(1L)).thenReturn(Optional.of(visit));
@@ -54,6 +57,7 @@ class VisitSDJpaServiceTest {
         verify(visitRepository).findById(1L);
     }
 
+    @DisplayName("Test save")
     @Test
     void save() {
         when(visitRepository.save(any(Visit.class))).thenReturn(visit);
@@ -64,12 +68,14 @@ class VisitSDJpaServiceTest {
         verify(visitRepository).save(any(Visit.class));
     }
 
+    @DisplayName("Test delete")
     @Test
     void delete() {
         service.delete(visit);
         verify(visitRepository).delete(any(Visit.class));
     }
 
+    @DisplayName("Test delete by Id")
     @Test
     void deleteById() {
         service.deleteById(1L);
