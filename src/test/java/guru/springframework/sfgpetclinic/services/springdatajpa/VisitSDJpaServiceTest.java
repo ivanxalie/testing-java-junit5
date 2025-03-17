@@ -56,7 +56,7 @@ class VisitSDJpaServiceTest {
 
     @Test
     void save() {
-        when(visitRepository.save(visit)).thenReturn(visit);
+        when(visitRepository.save(any(Visit.class))).thenReturn(visit);
 
         Visit saved = service.save(visit);
 
@@ -72,9 +72,7 @@ class VisitSDJpaServiceTest {
 
     @Test
     void deleteById() {
-
         service.deleteById(1L);
-
         verify(visitRepository).deleteById(1L);
     }
 }
