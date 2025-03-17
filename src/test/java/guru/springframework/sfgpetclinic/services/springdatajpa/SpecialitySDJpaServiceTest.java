@@ -2,6 +2,7 @@ package guru.springframework.sfgpetclinic.services.springdatajpa;
 
 import guru.springframework.sfgpetclinic.model.Speciality;
 import guru.springframework.sfgpetclinic.repositories.SpecialtyRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,66 +25,77 @@ class SpecialitySDJpaServiceTest {
     @InjectMocks
     private SpecialitySDJpaService service;
 
+    @AfterEach
+    void tearDown() {
+        then(specialtyRepository).shouldHaveNoMoreInteractions();
+    }
+
     @Test
     void deleteById() {
+        // when
         service.deleteById(1L);
         service.deleteById(1L);
 
-        verify(specialtyRepository, times(2)).deleteById(1L);
+        // then
+        then(specialtyRepository).should(times(2)).deleteById(1L);
     }
 
     @Test
     void deleteByIdAtLeast() {
+        // when
         service.deleteById(1L);
         service.deleteById(1L);
 
-        verify(specialtyRepository, atLeastOnce()).deleteById(1L);
+        // then
+        then(specialtyRepository).should(atLeastOnce()).deleteById(1L);
     }
 
     @Test
     void deleteByIdAtMost() {
+        // when
         service.deleteById(1L);
 
-        verify(specialtyRepository, atMost(1)).deleteById(1L);
+        // then
+        then(specialtyRepository).should(atMost(2)).deleteById(1L);
     }
 
     @Test
     void deleteNever() {
+        // when
         service.deleteById(1L);
         service.deleteById(1L);
 
-        verify(specialtyRepository, never()).deleteById(5L);
+        // then
+        then(specialtyRepository).should(never()).deleteById(5L);
+        then(specialtyRepository).should(atLeastOnce()).deleteById(1L);
     }
 
     @Test
     void delete() {
+        // given
         Speciality speciality = new Speciality();
+
+        // when
         service.delete(speciality);
-        verify(specialtyRepository).delete(speciality);
-    }
 
-    @Test
-    void findByIdTest() {
-        Speciality speciality = new Speciality();
-
-        when(specialtyRepository.findById(1L)).thenReturn(Optional.of(speciality));
-
-        Speciality specialityFromService = service.findById(1L);
-
-        assertThat(specialityFromService).isNotNull().isEqualTo(speciality);
-
-        verify(specialtyRepository).findById(1L);
+        // then
+        then(specialtyRepository).should().delete(speciality);
     }
 
     @Test
     void deleteByObject() {
+        // given
         Speciality speciality = new Speciality();
+
+        // when
         service.delete(speciality);
-        verify(specialtyRepository).delete(any(Speciality.class));
+
+        // then
+        then(specialtyRepository).should().delete(any(Speciality.class));
     }
 
     @Test
-    void findByIdBddTest() {
+    void findByIdTest() {
         // given
         Speciality speciality = new Speciality();
         given(specialtyRepository.findById(1L)).willReturn(Optional.of(speciality));
@@ -93,8 +105,6 @@ class SpecialitySDJpaServiceTest {
 
         // then
         assertThat(found).isNotNull().isEqualTo(speciality);
-
         then(specialtyRepository).should().findById(1L);
-        then(specialtyRepository).shouldHaveNoMoreInteractions();
     }
 }
