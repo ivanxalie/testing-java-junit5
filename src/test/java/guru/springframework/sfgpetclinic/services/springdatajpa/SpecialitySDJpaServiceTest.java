@@ -12,9 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SpecialitySDJpaServiceTest {
@@ -105,6 +104,30 @@ class SpecialitySDJpaServiceTest {
 
         // then
         assertThat(found).isNotNull().isEqualTo(speciality);
+        then(specialtyRepository).should().findById(1L);
+    }
+
+    @Test
+    void testDoThrow() {
+        // given
+        willThrow(new RuntimeException("boom")).given(specialtyRepository).delete(any(Speciality.class));
+
+        // when
+        assertThrows(RuntimeException.class, () -> specialtyRepository.delete(new Speciality()));
+
+        // then
+        then(specialtyRepository).should().delete(any(Speciality.class));
+    }
+
+    @Test
+    void testFindByIdThrows() {
+        // given
+        given(specialtyRepository.findById(any(Long.class))).willThrow(new RuntimeException("boom"));
+
+        // when
+        assertThrows(RuntimeException.class, () -> service.findById(1L));
+
+        // then
         then(specialtyRepository).should().findById(1L);
     }
 }
