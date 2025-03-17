@@ -2,6 +2,7 @@ package guru.springframework.sfgpetclinic.services.springdatajpa;
 
 import guru.springframework.sfgpetclinic.model.Visit;
 import guru.springframework.sfgpetclinic.repositories.VisitRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,11 @@ class VisitSDJpaServiceTest {
     @BeforeEach
     void setUp() {
         visit = new Visit();
+    }
+
+    @AfterEach
+    void tearDown() {
+        then(visitRepository).shouldHaveNoMoreInteractions();
     }
 
     @DisplayName("Test Find All")
