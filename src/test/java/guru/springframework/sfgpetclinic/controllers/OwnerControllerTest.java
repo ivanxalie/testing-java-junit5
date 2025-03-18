@@ -21,6 +21,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -97,11 +98,12 @@ class OwnerControllerTest {
         Owner owner = new Owner(5L, "Joe", "Buck");
 
         // when
-        String result = controller.processFindForm(owner, bindingResult, null);
+        String result = controller.processFindForm(owner, bindingResult, model);
 
         // then
         assertThat(captor.getValue()).isNotNull().isEqualTo("%Buck%");
         assertThat(result).isNotNull().isEqualTo("redirect:/owners/5");
+        then(model).shouldHaveZeroInteractions();
         then(service).should().findAllByLastNameLike(captor.getValue());
     }
 
@@ -111,11 +113,12 @@ class OwnerControllerTest {
         Owner owner = new Owner(1L, "Joe", "CantTouchMe");
 
         // when
-        String result = controller.processFindForm(owner, bindingResult, null);
+        String result = controller.processFindForm(owner, bindingResult, model);
 
         // then
         assertThat(captor.getValue()).isNotNull().isEqualTo("%CantTouchMe%");
         assertThat(result).isNotNull().isEqualTo("owners/findOwners");
+        then(model).shouldHaveZeroInteractions();
         then(service).should().findAllByLastNameLike(captor.getValue());
     }
 
@@ -133,5 +136,6 @@ class OwnerControllerTest {
         assertThat(result).isNotNull().isEqualTo("owners/ownersList");
         then(service).should(order).findAllByLastNameLike(captor.getValue());
         then(model).should(order).addAttribute(anyString(), anyList());
+        then(model).shouldHaveNoMoreInteractions();
     }
 }
